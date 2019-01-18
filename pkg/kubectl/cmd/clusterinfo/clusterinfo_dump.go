@@ -202,6 +202,15 @@ func (o *ClusterInfoDumpOptions) Run() error {
 			return err
 		}
 
+		cms, err := o.CoreClient.ConfigMaps(namespace).List(metav1.ListOptions{})
+		if err != nil {
+			return err
+		}
+
+		if err := o.PrintObj(cms, setupOutputWriter(o.OutputDir, o.Out, path.Join(namespace, "events.json"))); err != nil {
+			return err
+		}
+
 		rcs, err := o.CoreClient.ReplicationControllers(namespace).List(metav1.ListOptions{})
 		if err != nil {
 			return err
